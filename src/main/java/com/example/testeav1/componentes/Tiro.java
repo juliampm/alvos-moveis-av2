@@ -19,13 +19,14 @@ public class Tiro extends Thread{
     private int identificacaoAlvo;
     private Circle circuloTiro;
     private boolean sentido;
+    private Alvo alvo;
 
-    public Tiro (double destinox, double destinoy, boolean sentido, int identificacaoAlvo, Color lancador){
+    public Tiro (double destinox, double destinoy, boolean sentido, Alvo alvo, Color lancador){
         circuloTiro = new Circle(origemx,origemy,Dados.TAMANHO_TIRO, lancador);
         this.destinox = destinox;
         this.destinoy = destinoy;
         this.sentido = sentido;
-        this.identificacaoAlvo = identificacaoAlvo;
+        this.alvo = alvo;
         start();
     }
 
@@ -41,7 +42,6 @@ public class Tiro extends Thread{
     public void run() {
         super.run();
         while(true){
-            long inicioTiro = System.currentTimeMillis();
             try {
                 this.localizacaoY -= destinoy;
                 if(sentido) {
@@ -59,16 +59,19 @@ public class Tiro extends Thread{
                     this.interrupt();
                     break;
                 }
+
+                int F1_antigo = alvo.getLocalizacaoAtualizada();
+
+                int F1_novo = alvo.getLocalizacaoAtualizada();
+                int diferenca = F1_novo - F1_antigo;
+                int velo1 = F1_antigo + 1;
+                double taxa = diferenca/velo1;
+
                 this.desenharTiro(localizacaoX,localizacaoY);
                 sleep(freqAtualizacao);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            long finalTiro = System.currentTimeMillis();
-            long totalTiro;
-            totalTiro = finalTiro - inicioTiro;
-            System.out.println("Tempo total tiro= " + totalTiro);
-
         }
     }
 

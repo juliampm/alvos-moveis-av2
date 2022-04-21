@@ -48,9 +48,19 @@ public class Alvo extends Thread {
     @Override
     public void run() {
         super.run();
+
         long inicioAlvo = System.currentTimeMillis();
+        int cont = 0;
         while(destinoy >= localizacaoAtualizada && !atingido) {
             try {
+                if(cont < 5 && rand.nextInt(18)>=16) {
+                    int aleatorio = rand.nextInt(20);
+                    this.localizacaoAtualizada += aleatorio;
+                    this.desenharAlvo(this.localizacaoAtualizada);
+                    System.out.println("Andou= " + aleatorio);
+                    sleep(freqAtualizacaoPosicao);
+                    cont++;
+                }
                 this.localizacaoAtualizada += 1;
                 this.desenharAlvo(this.localizacaoAtualizada);
                 sleep(freqAtualizacaoPosicao);
@@ -66,7 +76,7 @@ public class Alvo extends Thread {
         long finalAlvo = System.currentTimeMillis();
         long totalAlvo;
         totalAlvo = finalAlvo - inicioAlvo;
-        System.out.println("Tempo total Alvo= " + totalAlvo);
+        //System.out.println("Tempo total Alvo= " + totalAlvo);
     }
 
     public Circle getCirculoAlvo() {

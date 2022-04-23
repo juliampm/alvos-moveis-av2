@@ -49,8 +49,8 @@ public class Alvo extends Thread {
     @Override
     public void run() {
         super.run();
-
-        long inicioAlvo = System.currentTimeMillis();
+        //Atualização para AV2
+        //Reconciliação de dados: Cálculo
         int cont = 0;
         int tempoInterferencia = 60;
         while(destinoy >= localizacaoAtualizada && !atingido) {
@@ -59,7 +59,6 @@ public class Alvo extends Thread {
                         int aleatorio = rand.nextInt(10,20);
                         this.localizacaoAtualizada += aleatorio;
                         this.desenharAlvo(this.localizacaoAtualizada);
-                        System.out.println("Alvo andou = " + aleatorio);
                         sleep(freqAtualizacaoPosicao);
                         cont++;
                         tempoInterferencia = 50;

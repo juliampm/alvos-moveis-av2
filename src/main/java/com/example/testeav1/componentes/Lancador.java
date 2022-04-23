@@ -49,7 +49,6 @@ public class Lancador extends Thread{
 
         int i =0;
         while (true) {
-            long inicioMirar = System.currentTimeMillis();
             mid = (sup + inf)/2.f;
             distancia = Math.sqrt(200.f*200.f + mid*mid);
             i++;
@@ -65,10 +64,6 @@ public class Lancador extends Thread{
             } else if(distancia < novoTamanho - mid) {
                inf = mid;
             }
-            long finalMirar = System.currentTimeMillis();
-            long totalMirar;
-            totalMirar = finalMirar - inicioMirar;
-            //System.out.println("Tempo total Mirar= " + totalMirar);
         }
     }
 
@@ -114,16 +109,11 @@ public class Lancador extends Thread{
     public void run() {
         super.run();
         while (true){
-            long inicioLancador = System.currentTimeMillis();
             try {
                 carregar();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            long finalLancador = System.currentTimeMillis();
-            long totalLancador;
-            totalLancador = finalLancador - inicioLancador;
-            //System.out.println("Tempo total Lancador= " + totalLancador);
         }
     }
 }

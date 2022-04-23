@@ -30,7 +30,6 @@ public class Tiro extends Thread{
         this.sentido = sentido;
         this.alvo = alvo;
         F1_antigo = alvo.getLocalizacaoAtualizada();
-        velocidadeAlvo = 1;
         start();
     }
 
@@ -47,6 +46,8 @@ public class Tiro extends Thread{
         super.run();
         while(true){
             try {
+                //Atualização AV2:
+                //Reconciliação de dados: cálculo da taxa de ajuste de velocidade do tiro com base no deslocamento do alvo.
                 if(F1_novo != 0) {
                     F1_antigo = F1_novo;
                 }
@@ -54,10 +55,10 @@ public class Tiro extends Thread{
                 int velocidade = 1;
                 if(F1_novo != 0 && F1_antigo != 0){
                     velocidade = F1_novo - F1_antigo;
-                    if(velocidade > 1) {
-                        //velocidade += 1;
-                        System.out.println("Tiro andou = " + velocidade);
-                    }
+//                    if(velocidade > 1) {
+//                        //velocidade += 1;
+//                        System.out.println("Tiro andou = " + velocidade);
+//                    }
                 }
                 this.localizacaoY -= destinoy*velocidade;
                 if(sentido) {
@@ -75,10 +76,6 @@ public class Tiro extends Thread{
                     this.interrupt();
                     break;
                 }
-
-
-
-
                 this.desenharTiro(localizacaoX,localizacaoY);
                 sleep(freqAtualizacao);
             } catch (InterruptedException e) {

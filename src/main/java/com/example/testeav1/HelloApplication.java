@@ -54,10 +54,13 @@ public class HelloApplication extends Application {
                             }
                         }
                     }));
+        //Atualização para AV2:
         //Funcionando para 5 alvos novos
-        novosAlvosTimer.setCycleCount(2);
+        novosAlvosTimer.setCycleCount(Dados.CICLO_GERACAO_DE_ALVOS);
         novosAlvosTimer.play();
-
+        novosAlvosTimer.setOnFinished((ActionEvent e) -> {
+            new Relatorio(alvos);
+        });
 
         //Atualizar a tela para tentar diminuir travamentos de renderização
         Timeline refresh = new Timeline(
@@ -112,39 +115,21 @@ public class HelloApplication extends Application {
         colisaoTimer.setCycleCount(Timeline.INDEFINITE);
         colisaoTimer.play();
 
+        //Atualização para Av2
         //2 Alvos no início da aplicação
         Alvo alvo = new Alvo(alvos.size());
         alvosDisponiveis.add(alvo);
         alvos.add(alvo);
-//        Alvo alvo2 = new Alvo(alvos.size());
-//        alvosDisponiveis.add(alvo2);
-//        alvos.add(alvo2);
+        Alvo alvo2 = new Alvo(alvos.size());
+        alvosDisponiveis.add(alvo2);
+        alvos.add(alvo2);
 
 
         for(int i = 0;i< Dados.QUANTIDADE_LANCADORES; i++) {
             this.lancadores.add(new Lancador(this.lancadores.size(), alvosDisponiveis, semaforoManipularAlvos));
             root.getChildren().add(this.lancadores.get(lancadores.size()-1).getRetangulo());
         }
-
-//        while(true){
-//            if(alvos.size() == Dados.NUMERO_ALVOS && alvos.get(Dados.NUMERO_ALVOS - 1).getTempoFinalizacao() != 0){
-//                System.out.println("###### Relatório #####\n\n");
-//                for(int i = 0; i < alvos.size(); i++){
-//                    System.out.println("--- Alvo: " + alvo.getIdentificacao() + " ---");
-//                    System.out.println("\nTempo de início: " + alvo.getTimestamp());
-//                    System.out.println("\nTempo de finalização: " + alvo.getTempoFinalizacao());
-//                    System.out.println("\nTempo de trajetória: " + (alvo.getTempoFinalizacao() - alvo.getTimestamp()));
-//                    System.out.println("\nFoi atingido: " + alvo.getAtingido());
-//                    System.out.println("-------------------------------------");
-//                }
-//                System.out.println("#############################\n\n");
-//
-//                break;
-//            }
-//        }
     }
-
-
 
     public static void main(String[] args) {
         launch();

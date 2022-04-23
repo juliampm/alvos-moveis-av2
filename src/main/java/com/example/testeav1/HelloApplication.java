@@ -21,6 +21,7 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.Semaphore;
 
 public class HelloApplication extends Application {
@@ -53,9 +54,10 @@ public class HelloApplication extends Application {
                             }
                         }
                     }));
-        //Funcionando por tempo indefinido
-        novosAlvosTimer.setCycleCount(Timeline.INDEFINITE);
+        //Funcionando para 5 alvos novos
+        novosAlvosTimer.setCycleCount(2);
         novosAlvosTimer.play();
+
 
         //Atualizar a tela para tentar diminuir travamentos de renderização
         Timeline refresh = new Timeline(
@@ -94,10 +96,11 @@ public class HelloApplication extends Application {
                                 for (Lancador lancador : lancadores) {
                                     for (Tiro tiro : lancador.getTiros()) {
                                         if (tiro.isAlive()) {
-                                            var alvo = alvos.get(tiro.getIdentificacaoAlvo());
+                                            var alvo = alvos.get(tiro.getAlvo().getIdentificacao());
                                             if (Utils.distanciaEuclidiana(tiro.getLocalizacaoX(), tiro.getLocalizacaoY(), alvo.getOrigemx(), alvo.getLocalizacaoAtualizada())
                                                     <= Dados.TAMANHO_TIRO + Dados.TAMANHO_ALVO - 1) {
                                                 alvo.setAtingido();
+
                                                 tiro.setContatoAlvo();
                                                 lancador.adicionarMunicaoPorAcerto();
                                             }
@@ -113,16 +116,35 @@ public class HelloApplication extends Application {
         Alvo alvo = new Alvo(alvos.size());
         alvosDisponiveis.add(alvo);
         alvos.add(alvo);
-        Alvo alvo2 = new Alvo(alvos.size());
-        alvosDisponiveis.add(alvo2);
-        alvos.add(alvo2);
+//        Alvo alvo2 = new Alvo(alvos.size());
+//        alvosDisponiveis.add(alvo2);
+//        alvos.add(alvo2);
 
 
         for(int i = 0;i< Dados.QUANTIDADE_LANCADORES; i++) {
             this.lancadores.add(new Lancador(this.lancadores.size(), alvosDisponiveis, semaforoManipularAlvos));
             root.getChildren().add(this.lancadores.get(lancadores.size()-1).getRetangulo());
         }
+
+//        while(true){
+//            if(alvos.size() == Dados.NUMERO_ALVOS && alvos.get(Dados.NUMERO_ALVOS - 1).getTempoFinalizacao() != 0){
+//                System.out.println("###### Relatório #####\n\n");
+//                for(int i = 0; i < alvos.size(); i++){
+//                    System.out.println("--- Alvo: " + alvo.getIdentificacao() + " ---");
+//                    System.out.println("\nTempo de início: " + alvo.getTimestamp());
+//                    System.out.println("\nTempo de finalização: " + alvo.getTempoFinalizacao());
+//                    System.out.println("\nTempo de trajetória: " + (alvo.getTempoFinalizacao() - alvo.getTimestamp()));
+//                    System.out.println("\nFoi atingido: " + alvo.getAtingido());
+//                    System.out.println("-------------------------------------");
+//                }
+//                System.out.println("#############################\n\n");
+//
+//                break;
+//            }
+//        }
     }
+
+
 
     public static void main(String[] args) {
         launch();

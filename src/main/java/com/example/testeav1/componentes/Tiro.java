@@ -16,10 +16,12 @@ public class Tiro extends Thread{
     private int timestamp;
     private int freqAtualizacao = 30;
     private boolean contatoAlvo = false;
-    private int identificacaoAlvo;
     private Circle circuloTiro;
     private boolean sentido;
     private Alvo alvo;
+    private int F1_novo;
+    private int F1_antigo;
+    private int velocidadeAlvo;
 
     public Tiro (double destinox, double destinoy, boolean sentido, Alvo alvo, Color lancador){
         circuloTiro = new Circle(origemx,origemy,Dados.TAMANHO_TIRO, lancador);
@@ -27,6 +29,8 @@ public class Tiro extends Thread{
         this.destinoy = destinoy;
         this.sentido = sentido;
         this.alvo = alvo;
+        F1_antigo = alvo.getLocalizacaoAtualizada();
+        velocidadeAlvo = 1;
         start();
     }
 
@@ -43,29 +47,37 @@ public class Tiro extends Thread{
         super.run();
         while(true){
             try {
-                this.localizacaoY -= destinoy;
+                if(F1_novo != 0) {
+                    F1_antigo = F1_novo;
+                }
+                F1_novo = alvo.getLocalizacaoAtualizada();
+                int velocidade = 1;
+                if(F1_novo != 0 && F1_antigo != 0){
+                    velocidade = F1_novo - F1_antigo;
+                    if(velocidade > 1) {
+                        //velocidade += 1;
+                        System.out.println("Tiro andou = " + velocidade);
+                    }
+                }
+                this.localizacaoY -= destinoy*velocidade;
                 if(sentido) {
-                    this.localizacaoX -= destinox;
+                    this.localizacaoX -= destinox*velocidade;
                 } else {
-                    this.localizacaoX += destinox;
+                    this.localizacaoX += destinox*velocidade;
                 }
                 if(this.contatoAlvo) {
-                    System.out.println("O tiro direcionado ao alvo " + identificacaoAlvo + " acertou!");
+                    System.out.println("O tiro direcionado ao alvo " + alvo.getIdentificacao() + " acertou!");
                     this.interrupt();
                     break;
                 }
                 else if(this.localizacaoX >= 400 || this.localizacaoX <= 0) {
-                    System.out.println("O tiro direcionado ao alvo " + identificacaoAlvo + " errou!");
+                    System.out.println("O tiro direcionado ao alvo " + alvo.getIdentificacao() + " errou!");
                     this.interrupt();
                     break;
                 }
 
-                int F1_antigo = alvo.getLocalizacaoAtualizada();
 
-                int F1_novo = alvo.getLocalizacaoAtualizada();
-                int diferenca = F1_novo - F1_antigo;
-                int velo1 = F1_antigo + 1;
-                double taxa = diferenca/velo1;
+
 
                 this.desenharTiro(localizacaoX,localizacaoY);
                 sleep(freqAtualizacao);
@@ -91,19 +103,15 @@ public class Tiro extends Thread{
         this.localizacaoY = localizacaoY;
     }
 
-    public int getIdentificacaoAlvo() {
-        return identificacaoAlvo;
-    }
-
-    public void setIdentificacaoAlvo(int identificacaoAlvo) {
-        this.identificacaoAlvo = identificacaoAlvo;
-    }
-
     public Circle getCirculoTiro() {
         return circuloTiro;
     }
 
     public void setContatoAlvo() {
         this.contatoAlvo = true;
+    }
+
+    public Alvo getAlvo() {
+        return alvo;
     }
 }

@@ -23,6 +23,7 @@ public class Alvo extends Thread {
     private Boolean atingido = false;
     private Circle circuloAlvo;
     private Random rand = new Random();
+    private long tempoFinalizacao;
 
     public Alvo(int identificacao){
         this.timestamp = System.currentTimeMillis();
@@ -51,16 +52,20 @@ public class Alvo extends Thread {
 
         long inicioAlvo = System.currentTimeMillis();
         int cont = 0;
+        int tempoInterferencia = 60;
         while(destinoy >= localizacaoAtualizada && !atingido) {
             try {
-                if(cont < 5 && rand.nextInt(18)>=16) {
-                    int aleatorio = rand.nextInt(20);
-                    this.localizacaoAtualizada += aleatorio;
-                    this.desenharAlvo(this.localizacaoAtualizada);
-                    System.out.println("Andou= " + aleatorio);
-                    sleep(freqAtualizacaoPosicao);
-                    cont++;
-                }
+                    if (cont < 5 && tempoInterferencia <= 0) {
+                        int aleatorio = rand.nextInt(10,20);
+                        this.localizacaoAtualizada += aleatorio;
+                        this.desenharAlvo(this.localizacaoAtualizada);
+                        System.out.println("Alvo andou = " + aleatorio);
+                        sleep(freqAtualizacaoPosicao);
+                        cont++;
+                        tempoInterferencia = 50;
+                    }
+                    tempoInterferencia = tempoInterferencia - rand.nextInt(1,5);
+
                 this.localizacaoAtualizada += 1;
                 this.desenharAlvo(this.localizacaoAtualizada);
                 sleep(freqAtualizacaoPosicao);
@@ -72,11 +77,8 @@ public class Alvo extends Thread {
             System.out.println("Alvo " +identificacao + " foi atingido!");
         } else {
             System.out.println("Alvo " +identificacao + " não foi atingido!");
+            tempoFinalizacao = System.currentTimeMillis();
         }
-        long finalAlvo = System.currentTimeMillis();
-        long totalAlvo;
-        totalAlvo = finalAlvo - inicioAlvo;
-        //System.out.println("Tempo total Alvo= " + totalAlvo);
     }
 
     public Circle getCirculoAlvo() {
@@ -119,8 +121,16 @@ public class Alvo extends Thread {
         this.freqAtualizacaoPosicao = freqAtualizacaoPosicao;
     }
 
-    public void setAtingido() {
-        this.atingido = true;
+    public boolean getAtingido() {
+       return this.atingido;
     }
 
+    public void setAtingido() {
+        this.atingido = true;
+        this.tempoFinalizacao = System.currentTimeMillis();
+    }
+
+    public long getTempoFinalizacao() {
+        return tempoFinalizacao;
+    }
 }

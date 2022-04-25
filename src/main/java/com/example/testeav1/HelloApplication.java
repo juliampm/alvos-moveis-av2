@@ -55,7 +55,7 @@ public class HelloApplication extends Application {
                         }
                     }));
         //Atualização para AV2:
-        //Funcionando para 5 alvos novos
+        //Funcionando para ciclo específico, não mais por tempo indefinido.
         novosAlvosTimer.setCycleCount(Dados.CICLO_GERACAO_DE_ALVOS);
         novosAlvosTimer.play();
         novosAlvosTimer.setOnFinished((ActionEvent e) -> {
@@ -115,8 +115,6 @@ public class HelloApplication extends Application {
         colisaoTimer.setCycleCount(Timeline.INDEFINITE);
         colisaoTimer.play();
 
-        //Atualização para Av2
-        //2 Alvos no início da aplicação
         Alvo alvo = new Alvo(alvos.size());
         alvosDisponiveis.add(alvo);
         alvos.add(alvo);

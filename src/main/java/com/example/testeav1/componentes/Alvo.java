@@ -50,7 +50,7 @@ public class Alvo extends Thread {
     public void run() {
         super.run();
         //Atualização para AV2
-        //Reconciliação de dados: Cálculo
+        //Velocidade do alvo dinâmica
         int cont = 0;
         int tempoInterferencia = 60;
         while(destinoy >= localizacaoAtualizada && !atingido) {
